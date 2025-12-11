@@ -30,6 +30,13 @@ const App: React.FC = () => {
     checkApiKey().then(setHasKey);
   }, []);
 
+  // Handle initial responsive sidebar state
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setShowSidebar(false);
+    }
+  }, []);
+
   const handleApiKeyRequest = async () => {
     await requestApiKey();
     const valid = await checkApiKey();
@@ -196,7 +203,7 @@ const App: React.FC = () => {
 
   if (!hasKey) {
       return (
-          <div className="h-screen w-screen bg-pixel-bg flex items-center justify-center p-4 font-pixel">
+          <div className="h-[100dvh] w-screen bg-pixel-bg flex items-center justify-center p-4 font-pixel">
               <div className="bg-white border-4 border-black shadow-retro p-8 max-w-md text-center">
                   <h1 className="text-4xl mb-4">ACCESS KEY REQUIRED</h1>
                   <p className="text-xl mb-6">To use Veo video generation and Pro models, please connect your Paid Google Cloud Project.</p>
@@ -215,12 +222,20 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="h-screen w-screen flex overflow-hidden font-pixel bg-pixel-dark text-black">
+    <div className="h-[100dvh] w-screen flex overflow-hidden font-pixel bg-pixel-dark text-black relative">
+      {/* Mobile Sidebar Backdrop */}
+      {showSidebar && (
+        <div 
+          className="fixed inset-0 bg-black/60 z-30 md:hidden backdrop-blur-sm"
+          onClick={() => setShowSidebar(false)}
+        />
+      )}
+
       {/* Sidebar - Chat List */}
       <div className={`
-        fixed inset-y-0 left-0 w-80 bg-white border-r-4 border-black z-20 transform transition-transform duration-300
+        fixed inset-y-0 left-0 w-80 max-w-[85vw] bg-white border-r-4 border-black z-40 transform transition-transform duration-300
         ${showSidebar ? 'translate-x-0' : '-translate-x-full'}
-        md:relative md:translate-x-0
+        md:relative md:translate-x-0 md:z-0
       `}>
         <div className="p-4 border-b-4 border-black bg-pixel-blue h-16 flex items-center justify-between">
           <h1 className="text-2xl font-bold tracking-wider">MBTI CHAT</h1>
@@ -267,10 +282,10 @@ const App: React.FC = () => {
       </div>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col relative bg-white">
+      <div className="flex-1 flex flex-col relative bg-white w-full">
         {/* Mobile Header */}
-        <div className="md:hidden h-16 border-b-4 border-black flex items-center px-4 bg-pixel-blue">
-            <button onClick={() => setShowSidebar(!showSidebar)} className="mr-4">
+        <div className="md:hidden h-16 border-b-4 border-black flex items-center px-4 bg-pixel-blue shrink-0">
+            <button onClick={() => setShowSidebar(!showSidebar)} className="mr-4 p-1 active:bg-white/20 rounded">
                 <MenuIcon />
             </button>
             <h2 className="text-xl font-bold truncate">{currentSession?.name || 'Pixel MBTI Chat'}</h2>
@@ -296,11 +311,11 @@ const App: React.FC = () => {
                         </div>
                     )}
                     
-                    <div className={`max-w-[80%] md:max-w-[60%]`}>
+                    <div className={`max-w-[85%] md:max-w-[70%]`}>
                         {!isUser && <div className="text-xs font-bold mb-1 ml-1 text-gray-600">{msg.senderName}</div>}
                         
                         <div className={`
-                            relative p-4 border-4 border-black text-lg break-words
+                            relative p-3 md:p-4 border-4 border-black text-lg break-words
                             ${isUser 
                                 ? 'bg-pixel-green shadow-[-4px_4px_0px_0px_rgba(0,0,0,1)]' 
                                 : 'bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]'
@@ -353,12 +368,12 @@ const App: React.FC = () => {
             </div>
 
             {/* Input Area */}
-            <div className="p-4 bg-gray-100 border-t-4 border-black">
+            <div className="p-3 md:p-4 bg-gray-100 border-t-4 border-black shrink-0">
               {/* Image Preview */}
               {selectedImage && (
                 <div className="mb-2 flex items-start">
                   <div className="relative inline-block border-2 border-black">
-                    <img src={selectedImage} alt="Preview" className="h-20 w-auto" />
+                    <img src={selectedImage} alt="Preview" className="h-16 md:h-20 w-auto" />
                     <button 
                       onClick={() => setSelectedImage(null)}
                       className="absolute -top-2 -right-2 bg-red-500 text-white border-2 border-black w-6 h-6 flex items-center justify-center hover:bg-red-600"
@@ -381,7 +396,7 @@ const App: React.FC = () => {
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isCurrentProcessing}
-                  className="p-3 border-4 border-black bg-white hover:bg-gray-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="p-2 md:p-3 border-4 border-black bg-white hover:bg-gray-100 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] md:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <ImageIcon />
                 </button>
@@ -392,36 +407,33 @@ const App: React.FC = () => {
                   onChange={(e) => setInputText(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Type a message..."
-                  className="flex-1 p-3 text-lg border-4 border-black focus:outline-none focus:bg-white bg-white font-pixel shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] disabled:bg-gray-200"
+                  className="flex-1 p-2 md:p-3 text-base md:text-lg border-4 border-black focus:outline-none focus:bg-white bg-white font-pixel shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] disabled:bg-gray-200"
                   disabled={isCurrentProcessing}
                 />
                 <button
                   onClick={handleSendMessage}
                   disabled={(!inputText.trim() && !selectedImage) || isCurrentProcessing}
                   className={`
-                    p-3 border-4 border-black transition-all
+                    p-2 md:p-3 border-4 border-black transition-all
                     ${((!inputText.trim() && !selectedImage) || isCurrentProcessing) 
                         ? 'bg-gray-300 opacity-50 cursor-not-allowed' 
-                        : 'bg-pixel-green hover:bg-green-400 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]'
+                        : 'bg-pixel-green hover:bg-green-400 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] md:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none'
                     }
                   `}
                 >
                   <SendIcon />
                 </button>
               </div>
-              <div className="mt-2 text-xs text-gray-500 text-center">
-                  Try uploading an image for analysis, or ask to "create an image of...", "make a video of..."
-              </div>
             </div>
           </>
         ) : (
           <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-gray-50 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
-            <div className="bg-white p-8 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-w-md">
-                <h2 className="text-4xl mb-4 text-pixel-bg">WELCOME</h2>
-                <p className="text-xl mb-6">Select a chat from the sidebar or create a new one to talk with MBTI personalities!</p>
+            <div className="bg-white p-6 md:p-8 border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] max-w-md w-full">
+                <h2 className="text-3xl md:text-4xl mb-4 text-pixel-bg">WELCOME</h2>
+                <p className="text-lg md:text-xl mb-6">Select a chat from the sidebar or create a new one to talk with MBTI personalities!</p>
                 <button 
                     onClick={() => setIsModalOpen(true)}
-                    className="px-6 py-3 bg-pixel-card text-xl border-4 border-black hover:bg-yellow-300 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                    className="w-full md:w-auto px-6 py-3 bg-pixel-card text-xl border-4 border-black hover:bg-yellow-300 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all"
                 >
                     CREATE NEW CHAT
                 </button>

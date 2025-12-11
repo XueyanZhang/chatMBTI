@@ -18,7 +18,7 @@ const NewChatModal: React.FC<NewChatModalProps> = ({ isOpen, onClose, onCreate }
     if (selected.includes(type)) {
       setSelected(selected.filter(t => t !== type));
     } else {
-      if (selected.length < 5) {
+      if (selected.length < 8) {
         setSelected([...selected, type]);
       }
     }
@@ -35,10 +35,10 @@ const NewChatModal: React.FC<NewChatModalProps> = ({ isOpen, onClose, onCreate }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-      <div className="bg-white w-full max-w-2xl border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-6 relative">
+      <div className="bg-white w-full max-w-2xl border-4 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] p-4 sm:p-6 relative max-h-[90vh] overflow-y-auto">
         <button onClick={onClose} className="absolute top-4 right-4 text-2xl font-bold hover:text-red-600">X</button>
         
-        <h2 className="text-3xl font-pixel mb-6 text-center text-black">CREATE CHAT ROOM</h2>
+        <h2 className="text-2xl sm:text-3xl font-pixel mb-6 text-center text-black mt-2">CREATE CHAT ROOM</h2>
         
         <div className="mb-6">
           <label className="block text-xl mb-2 font-bold">ROOM NAME</label>
@@ -46,24 +46,24 @@ const NewChatModal: React.FC<NewChatModalProps> = ({ isOpen, onClose, onCreate }
             type="text" 
             value={chatName}
             onChange={e => setChatName(e.target.value)}
-            className="w-full border-4 border-black p-3 text-xl font-pixel focus:outline-none focus:bg-yellow-100"
+            className="w-full border-4 border-black p-3 text-lg sm:text-xl font-pixel focus:outline-none focus:bg-yellow-100"
             placeholder="e.g. The Debaters"
           />
         </div>
 
         <div className="mb-6">
-          <label className="block text-xl mb-2 font-bold">SELECT MEMBERS (MAX 5)</label>
-          <div className="grid grid-cols-4 gap-3 sm:grid-cols-8">
+          <label className="block text-xl mb-2 font-bold">SELECT MEMBERS (MAX 8)</label>
+          <div className="grid grid-cols-4 gap-2 sm:gap-3 sm:grid-cols-8">
             {Object.values(MBTI).map((mbti) => (
               <button
                 key={mbti}
                 onClick={() => toggleMBTI(mbti)}
                 className={`
-                  p-2 border-2 border-black text-center font-bold text-sm
+                  p-1 sm:p-2 border-2 border-black text-center font-bold text-sm sm:text-base
                   transition-all duration-100
                   ${selected.includes(mbti) 
                     ? 'bg-pixel-green translate-x-[2px] translate-y-[2px] shadow-none' 
-                    : `${MBTI_COLORS[mbti]} opacity-80 hover:opacity-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]`
+                    : `${MBTI_COLORS[mbti]} opacity-80 hover:opacity-100 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] sm:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]`
                   }
                 `}
               >
@@ -78,7 +78,7 @@ const NewChatModal: React.FC<NewChatModalProps> = ({ isOpen, onClose, onCreate }
             onClick={handleCreate}
             disabled={!chatName || selected.length === 0}
             className={`
-              px-8 py-3 text-xl font-bold border-4 border-black
+              px-6 py-2 sm:px-8 sm:py-3 text-lg sm:text-xl font-bold border-4 border-black w-full sm:w-auto
               ${(!chatName || selected.length === 0) ? 'bg-gray-300 cursor-not-allowed' : 'bg-pixel-card hover:bg-yellow-300 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:shadow-none active:translate-x-[4px] active:translate-y-[4px]'}
             `}
           >
