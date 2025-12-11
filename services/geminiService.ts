@@ -45,8 +45,11 @@ export const orchestrateChat = async (
     `${m.senderName}: ${m.content} [Type: ${m.type}]`
   ).join('\n');
 
+  const maxResponses = Math.min(characters.length, 6);
+
   const systemInstruction = `
-    You are the Director of a pixel-art chatroom. 
+    You are the Director of a pixel-art MBTI chatroom with ${characters.length} characters.
+
     Characters:
     ${characterDescriptions}
     
@@ -54,11 +57,14 @@ export const orchestrateChat = async (
     The user just sent a message.
     
     Task:
-    Decide which characters should respond. 
-    - You can have 1, 2, or at most 3 characters respond in a sequence.
+    Decide how many should respond (1 to ${maxResponses}) based on the context:
+    - In most cases, you can have 1, 2, or at most 4 characters respond in a sequence.
+    - In rare cases, you can have upto ${maxResponses} characters respond in that very sequence.
+    - The more characters in the room, the more can participate, but avoid spam.
     - Characters can reply to the user or to each other.
-    - Avoid spam. Do not have more than 3 responses total.
+    - Consider MBTI - some types are more talkative (E) vs quiet (I).
     - Characters MUST stay in character (MBTI).
+    - Balance natural group dynamics with readability.
     - If the user sent an image, characters should react to it visually/emotionally based on their MBTI.
     - Characters can perform actions: 
       - 'generate_image' (if asked to show something or feeling creative).
