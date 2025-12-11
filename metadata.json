@@ -1,6 +1,6 @@
 {
-  "name": "Pixel MBTI Chat",
-  "description": "A high-saturation pixel-art chat app where you talk with AI-powered MBTI personalities. Features image generation, video generation, and web search capabilities.",
+  "name": "ChatMBTI",
+  "description": "A pixel-art chat app where you talk with AI-powered MBTI personalities. Features image generation, video generation, and web search capabilities.",
   "requestFramePermissions": [
     "microphone",
     "camera"
