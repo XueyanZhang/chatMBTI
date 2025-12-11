@@ -4,9 +4,10 @@ interface AvatarProps {
   name: string;
   color: string;
   size?: 'sm' | 'md' | 'lg';
+  src?: string;
 }
 
-const Avatar: React.FC<AvatarProps> = ({ name, color, size = 'md' }) => {
+const Avatar: React.FC<AvatarProps> = ({ name, color, size = 'md', src }) => {
   const [imgError, setImgError] = useState(false);
 
   const sizeClasses = {
@@ -17,7 +18,8 @@ const Avatar: React.FC<AvatarProps> = ({ name, color, size = 'md' }) => {
 
   // Maps the character name (MBTI type) to an image file in the 'avatars' folder
   // Example: INTJ -> avatars/INTJ.png
-  const imgSrc = `avatars/${name}.png`;
+  // Or uses the provided src prop
+  const imgSrc = src || `avatars/${name}.png`;
 
   return (
     <div 

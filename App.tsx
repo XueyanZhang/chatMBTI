@@ -304,14 +304,14 @@ const App: React.FC = () => {
                 const char = currentSession.characters.find(c => c.id === msg.senderId);
                 
                 return (
-                  <div key={msg.id} className={`flex ${isUser ? 'justify-end' : 'justify-start items-end'} group`}>
+                  <div key={msg.id} className={`flex ${isUser ? 'justify-end items-end' : 'justify-start items-end'} group`}>
                     {!isUser && (
                         <div className="mr-2 mb-1 flex-shrink-0">
                             <Avatar name={char?.name || '?'} color={char?.color || 'bg-gray-400'} size="md" />
                         </div>
                     )}
                     
-                    <div className={`max-w-[85%] md:max-w-[70%]`}>
+                    <div className={`max-w-[75%] md:max-w-[70%]`}>
                         {!isUser && <div className="text-xs font-bold mb-1 ml-1 text-gray-600">{msg.senderName}</div>}
                         
                         <div className={`
@@ -354,6 +354,17 @@ const App: React.FC = () => {
                             )}
                         </div>
                     </div>
+
+                    {isUser && (
+                        <div className="ml-2 mb-1 flex-shrink-0">
+                            <Avatar 
+                              name="You" 
+                              color="bg-pixel-blue" 
+                              size="md" 
+                              src="https://api.dicebear.com/9.x/pixel-art/svg?seed=PixelUser" 
+                            />
+                        </div>
+                    )}
                   </div>
                 );
               })}
