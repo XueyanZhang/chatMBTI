@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pixel MBTI Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              pixel: ['"VT323"', 'monospace'],
+            },
+            colors: {
+              'pixel-bg': '#ff00ff', // High saturation magenta background
+              'pixel-card': '#fff100', // Bright yellow
+              'pixel-blue': '#00ffff', // Cyan
+              'pixel-green': '#00ff00', // Lime
+              'pixel-dark': '#1a1a1a',
+            },
+            boxShadow: {
+              'retro': '4px 4px 0px 0px rgba(0,0,0,1)',
+              'retro-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #7000ff;
+        background-image: 
+          linear-gradient(45deg, #7000ff 25%, #6600cc 25%, #6600cc 50%, #7000ff 50%, #7000ff 75%, #6600cc 75%, #6600cc 100%);
+        background-size: 20px 20px;
+        font-family: 'VT323', monospace;
+      }
+      /* Custom scrollbar for retro feel */
+      ::-webkit-scrollbar {
+        width: 12px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #000; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #fff100; 
+        border: 2px solid #000;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.1/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.32.0",
+    "react/": "https://esm.sh/react@^19.2.1/",
+    "react": "https://esm.sh/react@^19.2.1",
+    "uuid": "https://esm.sh/uuid@^13.0.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
